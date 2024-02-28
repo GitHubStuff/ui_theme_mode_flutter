@@ -1,6 +1,6 @@
 name: ui_theme_mode_flutter
 description: "Controls/Persists/Notifies of changes in theme"
-version: 0.0.1
+version: 0.0.1+1
 home_page: http://www.icodeforyou.com
 publish_to: none # Remove this line if you wish to publish to pub.dev
 
@@ -14,6 +14,8 @@ dependencies:
   equatable: ^2.0.5
   flutter_bloc: ^8.1.3
   hive_flutter: ^1.1.0
+  nosql_dart:
+    git: https://github.com/GitHubStuff/nosql_dart.git
 
 dev_dependencies:
   flutter_test:

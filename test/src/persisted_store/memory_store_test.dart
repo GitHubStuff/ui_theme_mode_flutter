@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
+import 'package:nosql_dart/nosql_dart.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

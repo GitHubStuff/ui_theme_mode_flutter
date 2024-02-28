@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nosql_dart/nosql_dart.dart';
 
 import '../observer/platform_brightness_observer.dart';
-import '../persisted_store/on_device_store.dart';
 
 part 'ui_theme_mode_state.dart';
 

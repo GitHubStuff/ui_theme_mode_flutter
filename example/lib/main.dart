@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:nosql_dart/nosql_dart.dart';
 import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
 
 import 'screens/app_module.dart';
