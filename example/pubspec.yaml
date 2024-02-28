@@ -1,4 +1,4 @@
-name: app_template
+name: theme_demo
 description: A new Flutter template.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -17,8 +17,8 @@ dependencies:
   flutter_modular: ^6.3.2 # Smart project structure with dependency injection and route management
   ui_extensions_flutter:
     git: https://github.com/GitHubStuff/ui_extensions_flutter.git
-  package_template:
-    path: ../../package_template
+  ui_theme_mode_flutter:
+    path: ../../ui_theme_mode_flutter
 
 # dart run build_runner build -d
 dev_dependencies:
@@ -35,16 +35,16 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/images/ltmm1024x1024.png"
+  image_path: "assets/images/rainbow.png"
   macos:
     generate: true
-    image_path: "assets/images/ltmm1024x1024.png"
+    image_path: "assets/images/rainbow.png"
   web:
     generate: true
-    image_path: "assets/images/ltmm1024x1024.png"
+    image_path: "assets/images/rainbow.png"
   windows:
     generate: true
-    image_path: "assets/images/ltmm1024x1024.png"
+    image_path: "assets/images/rainbow.png"
 
 # Element of flutter_gen https://pub.dev/packages/flutter_gen/install
 # '% dart pub global activate flutter_gen'

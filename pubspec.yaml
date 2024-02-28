@@ -1,5 +1,5 @@
-name: package_template
-description: "A new Flutter package project."
+name: ui_theme_mode_flutter
+description: "Controls/Persists/Notifies of changes in theme"
 version: 0.0.1
 home_page: http://www.icodeforyou.com
 publish_to: none # Remove this line if you wish to publish to pub.dev
@@ -9,15 +9,20 @@ environment:
   flutter: ">=3.19.0"
 
 dependencies:
+  bloc_test: ^9.1.5
   flutter:
     sdk: flutter
-  ui_extensions_flutter:
-    git: https://github.com/GitHubStuff/ui_extensions_flutter.git
+  equatable: ^2.0.5
+  flutter_bloc: ^8.1.3
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.8
   flutter_lints: ^3.0.1
+  mockito: ^5.4.4 # Mock library for Dart inspired by Mockito.
+  file: ^7.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

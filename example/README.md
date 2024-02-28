@@ -1,6 +1,6 @@
-# bundleSuffix
+# mode_flutter
 
-- **LAST UPDATED 18-JAN-2024**
+- **LAST UPDATED 28-FEB-2024**
 
 A complete, self-contained, Flutter app that is the starting point for an **App** for iOS, MacOS, Android, Windows, and Chrome
 
@@ -12,30 +12,30 @@ A complete, self-contained, Flutter app that is the starting point for an **App*
 
 ### These are the steps when using VSCode
 
-- Find/Replace `app_template` to name of the flutter name of the app (ex: `my_spiffy_app`)
-- Find/Replace `MyAppName` to a label used to name the app on mobile Platforms (ex:`My Spiffy Mobile App`)
-- Find/Replace `macOSName` to the name of your macOS app (ex: `My Spiffy macOS App`)
-- Find/Replace `my.domain` to the project down for the product/customer (ex: `apple.com`)
-- Find/Replace `reverse.domain` with the projects **reverse domain** that the start of the apps' identifier (ex: `com.apple`)
-- Find/Replace `bundleSuffix` with bundle id (ex: `my_spiffy_app`) **[using the folder name is ideal]**
-- Find/Replace `AppleSuffix` for Apple bundles as iOS/MacOS do like '_'. **[ideal is folder name to lower-camel case (ex: `mySpiffyApp`)]**
-- The image `/assets/images/ltmm1024x1024.png` is a placeholder image to generate application icons. In the `pubspec.yaml` file is section marked *flutter_icons*:
+- Find/Replace `theme_demo` to name of the flutter name of the app (ex: `my_spiffy_app`)
+- Find/Replace `Theme Demo` to a label used to name the app on mobile Platforms (ex:`My Spiffy Mobile App`)
+- Find/Replace `Theme Demo for Mac` to the name of your macOS app (ex: `My Spiffy macOS App`)
+- Find/Replace `icodeforyou.com` to the project down for the product/customer (ex: `apple.com`)
+- Find/Replace `com.icodeforyou` with the projects **reverse domain** that the start of the apps' identifier (ex: `com.apple`)
+- Find/Replace `mode_flutter` with bundle id (ex: `my_spiffy_app`) **[using the folder name is ideal]**
+- Find/Replace `modeFlutter` for Apple bundles as iOS/MacOS do like '_'. **[ideal is folder name to lower-camel case (ex: `mySpiffyApp`)]**
+- The image `/assets/images/rainbow.png` is a placeholder image to generate application icons. In the `pubspec.yaml` file is section marked *flutter_icons*:
 
   ```dart
   flutter_icons:
   android: 'launcher_icon'
   ios: true
   remove_alpha_ios: true
-  image_path: 'assets/images/ltmm1024x1024.png'
+  image_path: 'assets/images/rainbow.png'
   macos:
     generate: true
-    image_path: 'assets/images/ltmm1024x1024.png'
+    image_path: 'assets/images/rainbow.png'
   web:
     generate: true
-    image_path: 'assets/images/ltmm1024x1024.png'
+    image_path: 'assets/images/rainbow.png'
   windows:
     generate: true
-    image_path: 'assets/images/ltmm1024x1024.png'
+    image_path: 'assets/images/rainbow.png'
 
   ```
 
@@ -47,7 +47,7 @@ A complete, self-contained, Flutter app that is the starting point for an **App*
 
   generating icons for iOS/Mac/Android/Web and even Windows *(Widows sucks but I guess someone has to do it.)*
 
-  NOTE: The sample app already has the [ltmm1024x1024](assets/images/ltmm1024x1024.png). The best images are 1024x1024. Replace the image and make sure the `image_path` in `pubspec.yaml` is updated and then run the
+  NOTE: The sample app already has the [rainbow](assets/images/rainbow.png). The best images are 1024x1024. Replace the image and make sure the `image_path` in `pubspec.yaml` is updated and then run the
   `% dart run flutter_launcher_icons` again.
 
 - From the terminal in the IDE:

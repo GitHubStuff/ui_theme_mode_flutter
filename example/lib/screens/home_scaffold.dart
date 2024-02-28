@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../gen/assets.gen.dart';
 
-import 'package:package_template/package_template.dart';
+import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
 
 class HomeScaffold extends StatelessWidget {
   const HomeScaffold({super.key});
@@ -20,8 +20,8 @@ class HomeScaffold extends StatelessWidget {
   Widget homeWidget(BuildContext context) {
     //TODO: Replace with your own code
     // ignore: non_constant_identifier_names
-    final PackageTemplate package_template = PackageTemplate();
-    debugPrint('$package_template');
+    final PackageTemplate ui_theme_mode_flutter = PackageTemplate();
+    debugPrint('$ui_theme_mode_flutter');
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +31,7 @@ class HomeScaffold extends StatelessWidget {
             height: 200,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Assets.images.ltmm1024x1024.image(),
+              child: Assets.images.rainbow.image(),
             ),
           ),
         ],
