@@ -2,7 +2,7 @@ part of 'platform_brightness_observer.dart';
 
 class PlatformBrightnessHandler extends PlatformObserver {
   PlatformBrightnessHandler() : super() {
-    debugPrint('🟣 constructor $currentThemeMode');
+    //debugPrint('🟣 constructor $currentThemeMode');
     _themeMode = ThemeMode.system;
   }
 
@@ -18,8 +18,8 @@ class PlatformBrightnessHandler extends PlatformObserver {
   @override
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
-    debugPrint(
-        '🟢 didChangePlatformBrightness $currentThemeMode $_lastAppLifecycleState');
+    // debugPrint(
+    //     '🟢 didChangePlatformBrightness $currentThemeMode $_lastAppLifecycleState');
     for (var listener in _subscribers) {
       listener(_themeMode, _lastAppLifecycleState);
     }
@@ -28,7 +28,7 @@ class PlatformBrightnessHandler extends PlatformObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    debugPrint('🟡 didChangeAppLifecycleState $state $currentThemeMode');
+    //debugPrint('🟡 didChangeAppLifecycleState $state $currentThemeMode');
     _lastAppLifecycleState = state;
     for (var listener in _subscribers) {
       listener(_themeMode, state);

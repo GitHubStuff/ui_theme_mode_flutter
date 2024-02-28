@@ -1,8 +1,8 @@
 # SETUP
 
-- Find/Replace `ui_theme_mode_flutter` to name of the name of the package (ex: `flutter_rocks`)
-- Addess the *TODO:* in the **/example** folder by adding code from the package
-- If needed/wanted follow the instructions in the **/example/README.md** to have the example app more reflective of your package and show off features of widget packages.
+- A fair bit of setup is required to install this. The example shows the most basic of setups. To used this modifications to main.dart, app_module.dart, and home_scaffold.dart are needed.
+
+- Apps will need to include: flutter_bloc and flutter_modular.
 
 <!--
 The comments below are from the Flutter/Dart package generation. Feel free to use or ignore
@@ -21,17 +21,19 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This framework will allow for the ThemeMode (dark, light, or system) to be persisted and provide notification when ThemeMode changes, as well as if the them is dark or light based on the platform brightness.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Remember Theme between starts of the app.
+
+Redraws the widget tree when the theme is changed.
+
+Allows setting the theme.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+As noted above the, the /example directory show the changes and set-up needed.
 
 ## Usage
 
@@ -39,7 +41,11 @@ TODO: Include short and useful examples for package users. Add longer examples
 to `/example` folder.
 
 ```dart
-const like = 'sample';
+final cubit = context.read<UIThemeModeCubit>();
+
+cubit.setToDarkMode();
+cubit.setToLightMode();
+cubit.setToSystemMode();
 ```
 
 ## Additional information

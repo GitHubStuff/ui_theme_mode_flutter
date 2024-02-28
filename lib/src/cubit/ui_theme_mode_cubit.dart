@@ -7,13 +7,16 @@ import '../persisted_store/on_device_store.dart';
 
 part 'ui_theme_mode_state.dart';
 
+const _themeKey = 'theme';
+
 /// Manages the application's theme by observing platform brightness changes
 /// and persisting theme preferences.
 class UIThemeModeCubit extends Cubit<UIThemeModeState> {
+  static Brightness _brightness = Brightness.light;
+
   ThemeMode _themeMode = ThemeMode.system;
   final PlatformObserver _platformObserver;
   final OnDeviceStore _persistedStore;
-  static const _themeKey = 'theme';
 
   UIThemeModeCubit({
     required OnDeviceStore persistedStore,
@@ -30,6 +33,22 @@ class UIThemeModeCubit extends Cubit<UIThemeModeState> {
     _platformObserver.unsubscribe(_onBrightnessChange);
     await _persistedStore.close();
     return super.close();
+  }
+
+  Brightness currentBrightness() => _brightness;
+
+  void setBrightness(BuildContext context) {
+    switch (_themeMode) {
+      case ThemeMode.dark:
+        _brightness = Brightness.dark;
+        break;
+      case ThemeMode.light:
+        _brightness = Brightness.light;
+        break;
+      case ThemeMode.system:
+        _brightness = MediaQuery.of(context).platformBrightness;
+        break;
+    }
   }
 
   void _onBrightnessChange(ThemeMode themeMode, AppLifecycleState state) {
@@ -66,5 +85,5 @@ class UIThemeModeCubit extends Cubit<UIThemeModeState> {
   void setToSystemMode() => setMode = ThemeMode.system;
 
   @override
-  String toString() => 'ThemeManagerCubit(themeMode: $_themeMode)';
+  String toString() => 'UIThemeModeCubit(themeMode: $_themeMode)';
 }

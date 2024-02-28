@@ -9,9 +9,9 @@ extension ThemeModeExt on ThemeMode {
   Brightness toBrightness({required PlatformObserver observer}) {
     return this == ThemeMode.system
         ? observer.currentThemeMode.toBrightness(observer: observer)
-        : this == ThemeMode.light
-            ? Brightness.light
-            : Brightness.dark;
+        : this == ThemeMode.dark
+            ? Brightness.dark
+            : Brightness.light;
   }
 }
 
