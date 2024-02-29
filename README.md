@@ -25,9 +25,9 @@ This framework will allow for the ThemeMode (dark, light, or system) to be persi
 
 ## Features
 
-Remember Theme between starts of the app.
+Remember Theme/Brightness between starts of the app.
 
-Redraws the widget tree when the theme is changed.
+Redraws the widget tree when the Theme/Brightness is changed.
 
 Allows setting the theme.
 
@@ -48,8 +48,6 @@ cubit.setToLightMode();
 cubit.setToSystemMode();
 ```
 
-## Additional information
+## Finally
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Be kind to each other.

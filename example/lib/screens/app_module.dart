@@ -43,9 +43,12 @@ class AppModule extends Module {
   /// Binds the `UIThemeModeCubit` to the dependency injection container.
   @override
   void binds(i) async {
-    i.addInstance<UIThemeModeCubit>(UIThemeModeCubit(
+    i.addInstance<UIThemeModeCubit>(
+      UIThemeModeCubit(
         persistedStore: onDeviceStore,
-        platformObserver: PlatformBrightnessHandler()));
+        platformObserver: PlatformBrightnessHandler(),
+      ),
+    );
   }
 
   /// Defines the routes for the application.

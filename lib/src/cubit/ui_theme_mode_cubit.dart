@@ -35,6 +35,13 @@ class UIThemeModeCubit extends Cubit<UIThemeModeState> {
     return super.close();
   }
 
+  @override
+  String toString() => 'UIThemeModeCubit(themeMode: $_themeMode)';
+
+  void setToDarkMode() => setThemeMode = ThemeMode.dark;
+  void setToLightMode() => setThemeMode = ThemeMode.light;
+  void setToSystemMode() => setThemeMode = ThemeMode.system;
+
   Brightness currentBrightness() => _brightness;
 
   void setBrightness(BuildContext context) {
@@ -51,27 +58,29 @@ class UIThemeModeCubit extends Cubit<UIThemeModeState> {
     }
   }
 
+  set setThemeMode(ThemeMode newThemeMode) {
+    if (newThemeMode == _themeMode) return;
+    _themeMode = newThemeMode;
+    _persistThemeMode();
+    emit(UIThemeModeNewState(_themeMode));
+  }
+
+  ThemeMode get themeMode => _themeMode;
+
   void _onBrightnessChange(ThemeMode themeMode, AppLifecycleState state) {
     if (state != AppLifecycleState.resumed ||
         _themeMode == ThemeMode.dark ||
         _themeMode == ThemeMode.light) {
       return;
     }
-    setMode = themeMode;
+    setThemeMode = themeMode;
   }
 
-  ThemeMode get themeMode => _themeMode;
-
-  set setMode(ThemeMode newValue) {
-    if (newValue == _themeMode) return;
-    _themeMode = newValue;
-    _persistThemeMode();
-    emit(UIThemeModeNewState(_themeMode));
-  }
-
-  Future<void> _restoreMode() async {
-    final themeModeIndex =
-        _persistedStore.get(_themeKey, defaultValue: ThemeMode.system.index);
+  void _restoreMode() {
+    final themeModeIndex = _persistedStore.get(
+      _themeKey,
+      defaultValue: ThemeMode.system.index,
+    );
     _themeMode = ThemeMode.values[themeModeIndex];
     emit(UIThemeModeNewState(_themeMode));
   }
@@ -79,11 +88,4 @@ class UIThemeModeCubit extends Cubit<UIThemeModeState> {
   Future<void> _persistThemeMode() async {
     await _persistedStore.put(_themeKey, _themeMode.index);
   }
-
-  void setToDarkMode() => setMode = ThemeMode.dark;
-  void setToLightMode() => setMode = ThemeMode.light;
-  void setToSystemMode() => setMode = ThemeMode.system;
-
-  @override
-  String toString() => 'UIThemeModeCubit(themeMode: $_themeMode)';
 }

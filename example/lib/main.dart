@@ -6,6 +6,7 @@ import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
 
 import 'screens/app_module.dart';
 
+/// Part of NoSQL database store.
 late final OnDeviceStore onDeviceStore;
 
 /// The main function of the application.
