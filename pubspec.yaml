@@ -15,7 +15,8 @@ dependencies:
   flutter_bloc: ^8.1.5
   hive_flutter: ^1.1.0
   nosql_dart:
-    git: https://github.com/GitHubStuff/nosql_dart.git
+    path: ../nosql_dart
+    #git: https://github.com/GitHubStuff/nosql_dart.git
 
 dev_dependencies:
   flutter_test:
