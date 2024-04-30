@@ -28,27 +28,20 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
   static UIThemeModeCubit volatile({
     ThemeMode initialThemeMode = ThemeMode.dark,
   }) {
-    if (_singleton == null) {
-      debugPrint('🧨🧨🧨🧨 VOLATILE DATABASE 🧨🧨🧨🧨');
-      _singleton = UIThemeModeCubit._(
-        noSqlProvider: NoSqlHiveTemp(),
-        initialThemeMode: initialThemeMode,
-      );
-    }
+    _singleton ??= UIThemeModeCubit._(
+      noSqlProvider: NoSqlHiveTemp(),
+      initialThemeMode: initialThemeMode,
+    );
     return _singleton!;
   }
 
   static UIThemeModeCubit persisted({
     ThemeMode initialThemeMode = ThemeMode.dark,
   }) {
-    if (_singleton == null) {
-      debugPrint('🙏🏽🙏🏽🙏🏽 PERSITED DATABASE 🙏🏽🙏🏽');
-      initialThemeMode;
-      _singleton = UIThemeModeCubit._(
-        noSqlProvider: NoSqlHive(),
-        initialThemeMode: initialThemeMode,
-      );
-    }
+    _singleton ??= UIThemeModeCubit._(
+      noSqlProvider: NoSqlHive(),
+      initialThemeMode: initialThemeMode,
+    );
     return _singleton!;
   }
 
@@ -65,21 +58,18 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
     required ThemeMode initialThemeMode,
   })  : _noSqlProvider = noSqlProvider,
         super(CubitInitial(initialThemeMode));
-
   final NoSqlAbstract _noSqlProvider;
   CONTAINER? _themeContainer;
 
   @override
   FutureOr<void> setUp() async {
     if (state is! CubitInitial) return;
-    emit(CubitConnectNoSql(state.themeMode));
-    debugPrint('🔒🔒🔒🔒 SETUP RUN LOCK ENABLED 🔒🔒🔒🔒');
+    emit(CubitWaitingToConnectMySql(state.themeMode));
     await _noSqlProvider.init(databaseName: UIThemeModeAbstract.databaseName);
     await _setGlobalThemeContainer();
     ThemeMode themeModeFromNoSql = _getThemeModeFromNoSql();
     _didSaveThemModeToNoSql(themeModeFromNoSql);
     emit(CubitThemeSet(themeModeFromNoSql));
-    debugPrint('🔓 SETUP COMPLETE 🔓');
   }
 
   Future<void> _setGlobalThemeContainer() async =>
@@ -97,9 +87,8 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
   }
 
   bool _didSaveThemModeToNoSql(ThemeMode newThemeMode) {
-    debugPrint('** Setting ${state.themeMode} to: $newThemeMode **');
     if (newThemeMode == state.themeMode) return false;
-    if (state is! CubitThemeSet && state is! CubitConnectNoSql) {
+    if (state is! CubitThemeSet && state is! CubitWaitingToConnectMySql) {
       throw NoSqlError('🚫 Database not initialized 🚫');
     }
     _noSqlProvider.put<CONTAINER, String>(

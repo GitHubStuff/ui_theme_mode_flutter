@@ -8,8 +8,9 @@ sealed class UIThemeModeState extends Equatable {
   List<Object?> get props => [themeMode, runtimeType];
 }
 
-class CubitConnectNoSql extends UIThemeModeState {
-  const CubitConnectNoSql(ThemeMode themeMode) : super(themeMode: themeMode);
+class CubitWaitingToConnectMySql extends UIThemeModeState {
+  const CubitWaitingToConnectMySql(ThemeMode themeMode)
+      : super(themeMode: themeMode);
 }
 
 class CubitError extends UIThemeModeState {

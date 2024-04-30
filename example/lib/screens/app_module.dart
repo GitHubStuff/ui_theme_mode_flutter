@@ -20,7 +20,7 @@ class AppModule extends Module {
   /// Binds the `UIThemeModeCubit` to the dependency injection container.
   @override
   void binds(i) {
-    i.addInstance(UIThemeModeCubit.persisted);
+    i.addInstance(UIThemeModeCubit.persisted());
   }
 
   /// Defines the routes for the application.

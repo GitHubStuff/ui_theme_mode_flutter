@@ -33,7 +33,7 @@ void main() {
         },
         act: (cubit) async => await cubit.setUp(),
         expect: () => <UIThemeModeState>[
-              const CubitConnectNoSql(ThemeMode.dark),
+              const CubitWaitingToConnectMySql(ThemeMode.dark),
               const CubitThemeSet(ThemeMode.dark),
             ]);
     blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>(
@@ -50,7 +50,7 @@ void main() {
           cubit.setToSystemMode();
         },
         expect: () => <UIThemeModeState>[
-              const CubitConnectNoSql(ThemeMode.light),
+              const CubitWaitingToConnectMySql(ThemeMode.light),
               const CubitThemeSet(ThemeMode.light),
               const CubitThemeSet(ThemeMode.system),
             ]);
@@ -67,7 +67,7 @@ void main() {
           cubit.setToSystemMode();
         },
         expect: () => <UIThemeModeState>[
-              const CubitConnectNoSql(ThemeMode.dark),
+              const CubitWaitingToConnectMySql(ThemeMode.dark),
               const CubitThemeSet(ThemeMode.dark),
               const CubitThemeSet(ThemeMode.system),
             ]);
