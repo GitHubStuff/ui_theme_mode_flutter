@@ -7,4 +7,15 @@ extension ThemeModeExtension on ThemeMode {
     }
     throw StateError('ThemeMode not found');
   }
+
+  Brightness get brightness {
+    switch (this) {
+      case ThemeMode.dark:
+        return Brightness.dark;
+      case ThemeMode.light:
+        return Brightness.light;
+      case ThemeMode.system:
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    }
+  }
 }

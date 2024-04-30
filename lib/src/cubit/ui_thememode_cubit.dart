@@ -1,84 +1,154 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show ThemeMode;
+import 'package:flutter/material.dart' show ThemeMode, WidgetsBinding;
 import 'package:flutter_bloc/flutter_bloc.dart' show Cubit;
 import 'package:nosql_dart/nosql_dart.dart';
-import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
-import '../extensions/thememode_extension.dart' show ThemeModeExtension;
+
+import '../extensions/thememode_extension.dart';
 
 part 'ui_thememode_state.dart';
 
 abstract class UIThemeModeAbstract {
   static const String databaseName = 'icfy_uithememode_database_v1r829464';
-  static const String containerName = 'icfy_uithememode_container_v1r829444';
+  static const String containerName = 'icfy_uithememode_container_v1r816447';
   static const String keyName = 'themeMode';
-  Future<void> setUp();
-  Future<void> setThemeMode(ThemeMode themeMode);
+  void setUp();
+  void setToDarkMode();
+  void setToLightMode();
+  void setToSystemMode();
+  Brightness get brightness;
 }
 
 class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
     implements UIThemeModeAbstract {
-  // Constructor
-  UIThemeModeCubit({required NoSqlAbstract noSqlProvider})
+  static UIThemeModeCubit? _singleton;
+  static ThemeMode _initialThemeMode = ThemeMode.dark;
+
+  static UIThemeModeCubit volatile({
+    ThemeMode initialThemeMode = ThemeMode.dark,
+  }) {
+    if (_singleton == null) {
+      debugPrint('🧨🧨🧨🧨 VOLATILE DATABASE 🧨🧨🧨🧨');
+      _initialThemeMode = initialThemeMode;
+      _singleton = UIThemeModeCubit._(
+        noSqlProvider: NoSqlHiveTemp(),
+        initialThemeMode: _initialThemeMode,
+      );
+    }
+    return _singleton!;
+  }
+
+  static UIThemeModeCubit persisted({
+    ThemeMode initialThemeMode = ThemeMode.dark,
+  }) {
+    if (_singleton == null) {
+      debugPrint('🙏🏽🙏🏽🙏🏽 PERSITED DATABASE 🙏🏽🙏🏽');
+      _initialThemeMode = initialThemeMode;
+      _singleton = UIThemeModeCubit._(
+        noSqlProvider: NoSqlHive(),
+        initialThemeMode: _initialThemeMode,
+      );
+    }
+    return _singleton!;
+  }
+
+  // Private Constructor
+  UIThemeModeCubit._(
+      {required NoSqlAbstract noSqlProvider,
+      required ThemeMode initialThemeMode})
       : _noSqlProvider = noSqlProvider,
-        super(const UIThemeModeInitial());
+        super(CubitInitial(initialThemeMode));
+
+  //💠💠💠💠 Class
+  UIThemeModeCubit({
+    required NoSqlAbstract noSqlProvider,
+    required ThemeMode initialThemeMode,
+  })  : _noSqlProvider = noSqlProvider,
+        super(CubitInitial(initialThemeMode));
 
   final NoSqlAbstract _noSqlProvider;
+  CONTAINER? _themeContainer;
 
   @override
-  Future<void> setUp() async {
-    await _init();
-    await _openContainer();
-    ThemeMode themeMode = await _getThemeMode();
-    emit(UIThemeModeSet(ThemeModeExtension.from(string: themeMode.name)));
+  FutureOr<void> setUp() async {
+    if (state is! CubitInitial) return;
+    emit(CubitConnectNoSql(state.themeMode));
+    debugPrint('🔒🔒🔒🔒 SETUP RUN LOCK ENABLED 🔒🔒🔒🔒');
+    await _noSqlProvider.init(databaseName: UIThemeModeAbstract.databaseName);
+    await _setGlobalThemeContainer();
+    ThemeMode themeModeFromNoSql = _getThemeModeFromNoSql();
+    emit(CubitThemeSet(themeModeFromNoSql));
+    debugPrint('🔓 SETUP COMPLETE 🔓');
   }
 
-  Future<void> _init() async =>
-      await _noSqlProvider.init(databaseName: UIThemeModeAbstract.databaseName);
+  Future<void> _setGlobalThemeContainer() async =>
+      _themeContainer ??= await _noSqlProvider.openContainer<CONTAINER, String>(
+        name: UIThemeModeAbstract.containerName,
+      );
 
-  Future<CONTAINER> _openContainer() async {
-    return await _noSqlProvider.openContainer<CONTAINER, String>(
-      name: UIThemeModeAbstract.containerName,
-    );
-  }
-
-  Future<ThemeMode> _getThemeMode() async {
-    final themeContainer = await _openContainer();
+  ThemeMode _getThemeModeFromNoSql() {
     String themeModeString = _noSqlProvider.get<CONTAINER>(
       UIThemeModeAbstract.keyName,
-      fromContainer: themeContainer,
-      defaultValue: ThemeMode.system.name,
+      fromContainer: _themeContainer as CONTAINER,
+      defaultValue: _initialThemeMode.name,
     );
     return ThemeModeExtension.from(string: themeModeString);
   }
 
   @override
-  Future<void> close() async {
-    await _shutdown();
-    super.close();
+  void setToDarkMode() => _setThemeMode(ThemeMode.dark);
+
+  @override
+  void setToLightMode() => _setThemeMode(ThemeMode.light);
+
+  @override
+  void setToSystemMode() => _setThemeMode(ThemeMode.system);
+
+  void _setThemeMode(ThemeMode newThemeMode) async {
+    debugPrint('** Setting ${state.themeMode} to: $newThemeMode **');
+    if (state is! CubitThemeSet) {
+      throw NoSqlError('🚫 Database not initialized 🚫');
+    }
+    if (newThemeMode == state.themeMode) return;
+    _putThemeMode(newThemeMode, _themeContainer as CONTAINER);
+    emit(CubitThemeSet(newThemeMode));
   }
 
-  Future<void> _shutdown() async {
-    final themeContainer = await _openContainer();
-    await _putThemeMode(state.themeMode, themeContainer);
-    await _noSqlProvider.close<CONTAINER>(container: themeContainer);
-    await _noSqlProvider.closeDatabase();
-  }
-
-  Future<void> _putThemeMode(
+  void _putThemeMode(
     ThemeMode themeMode,
     CONTAINER themeContainer,
-  ) async =>
-      await _noSqlProvider.put<CONTAINER, String>(
+  ) =>
+      _noSqlProvider.put<CONTAINER, String>(
         UIThemeModeAbstract.keyName,
         themeMode.name,
         intoContainer: themeContainer,
       );
 
   @override
-  Future<void> setThemeMode(ThemeMode themeMode) async {
-    emit(UIThemeModeSet(themeMode));
-    final themeContainer = await _openContainer();
-    return _putThemeMode(themeMode, themeContainer);
+  Future<void> close() async {
+    await _shutdownNoSql();
+    super.close();
+  }
+
+  Future<void> _shutdownNoSql() async {
+    if (state is! CubitThemeSet) return;
+    await _noSqlProvider.close<CONTAINER>(
+      container: _themeContainer as CONTAINER,
+    );
+    await _noSqlProvider.closeDatabase();
+  }
+
+  @override
+  Brightness get brightness {
+    switch (state.themeMode) {
+      case ThemeMode.light:
+        return Brightness.light;
+      case ThemeMode.dark:
+        return Brightness.dark;
+      case ThemeMode.system:
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    }
   }
 }

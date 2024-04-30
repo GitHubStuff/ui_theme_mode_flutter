@@ -10,7 +10,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('UIThemeModeCubit tests:', () {
-    late UIThemeModeCubit<Box<String>> uiThemeModeCubit;
     late NoSqlAbstract noSqlProvider;
 
     setUp(() {
@@ -18,34 +17,57 @@ void main() {
     });
     tearDown(() async {
       try {
-        await uiThemeModeCubit.close();
+        //await uiThemeModeCubit.close();
       } catch (_) {}
     });
 
     blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>(
-        'Initial state is UIThemeModeInitial',
+        'Initial state is UIThemeModeInitial (aka dark)',
         build: () {
-          uiThemeModeCubit =
-              UIThemeModeCubit<Box<String>>(noSqlProvider: noSqlProvider);
-          return uiThemeModeCubit;
+          debugPrint(
+              'Starting: Initial state is UIThemeModeInitial (aka dark)');
+          return UIThemeModeCubit<Box<String>>(
+            noSqlProvider: noSqlProvider,
+            initialThemeMode: ThemeMode.light,
+          );
         },
-        act: (cubit) => cubit.setUp(),
-        expect: () => const <UIThemeModeState>[
-              UIThemeModeSet(ThemeMode.system),
+        act: (cubit) async => await cubit.setUp(),
+        expect: () => <UIThemeModeState>[
+              CubitConnectNoSql(ThemeMode.dark),
+              CubitThemeSet(ThemeMode.dark),
             ]);
-    blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>('Set Theme Mode',
+    blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>(
+        'Set to ThemeMode.system',
         build: () {
-          uiThemeModeCubit =
-              UIThemeModeCubit<Box<String>>(noSqlProvider: noSqlProvider);
-          return uiThemeModeCubit;
+          debugPrint('Starting: Set to ThemeMode.system');
+          return UIThemeModeCubit<Box<String>>(
+            noSqlProvider: noSqlProvider,
+            initialThemeMode: ThemeMode.dark,
+          );
         },
         act: (cubit) async {
           await cubit.setUp();
-          await cubit.setThemeMode(ThemeMode.dark);
+          cubit.setToSystemMode();
         },
-        expect: () => const <UIThemeModeState>[
-              UIThemeModeSet(ThemeMode.system),
-              UIThemeModeSet(ThemeMode.dark),
+        expect: () => <UIThemeModeState>[
+              CubitConnectNoSql(ThemeMode.dark),
+              CubitThemeSet(ThemeMode.system),
+            ]);
+    blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>(
+        'Set to ThemeMode.light',
+        build: () {
+          return UIThemeModeCubit<Box<String>>(
+            noSqlProvider: noSqlProvider,
+            initialThemeMode: ThemeMode.dark,
+          );
+        },
+        act: (cubit) async {
+          await cubit.setUp();
+          cubit.setToSystemMode();
+        },
+        expect: () => <UIThemeModeState>[
+              CubitConnectNoSql(ThemeMode.dark),
+              CubitThemeSet(ThemeMode.system),
             ]);
   });
 }

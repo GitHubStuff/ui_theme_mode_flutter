@@ -17,6 +17,8 @@ dependencies:
   nosql_dart:
     path: ../nosql_dart
     #git: https://github.com/GitHubStuff/nosql_dart.git
+  ui_extensions_flutter:
+    git: https://github.com/GitHubStuff/ui_extensions_flutter.git
 
 dev_dependencies:
   flutter_test:

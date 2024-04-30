@@ -23,7 +23,7 @@ class HomeScaffold extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('${UIThemeModeCubit.brightness}'),
+          Text('${cubit.brightness}'),
           SizedBox(
             width: 200,
             height: 200,
@@ -44,10 +44,10 @@ class HomeScaffold extends StatelessWidget {
               child: const Text('Light')),
           ElevatedButton(
               onPressed: () {
-                cubit.setToDeviceMode();
+                cubit.setToSystemMode();
               },
               child: const Text('Device')),
-          const ThemeModeExpansionPanelList(),
+          //const ThemeModeExpansionPanelList(),
         ],
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/flutter_modular.dart' show Modular;
 
 /// A splash screen widget that displays a splash image and navigates to the first route after a delay.
 class SplashScreen extends StatelessWidget {
@@ -19,12 +19,16 @@ class SplashScreen extends StatelessWidget {
     super.key,
     required this.firstRoute,
     this.splashWidget = const SizedBox.shrink(),
-    this.splashScreenDuration = const Duration(milliseconds: 0),
+    this.splashScreenDuration = Duration.zero,
   });
 
   /// Builds the widget tree for this widget.
   @override
   Widget build(BuildContext context) {
+    return _splashWidget(context);
+  }
+
+  Widget _splashWidget(BuildContext context) {
     Future.delayed(splashScreenDuration, () {
       Modular.to.pushReplacementNamed(firstRoute);
     });
