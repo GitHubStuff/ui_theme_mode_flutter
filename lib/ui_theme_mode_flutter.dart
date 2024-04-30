@@ -6,3 +6,4 @@ export 'src/extensions/thememode_extension.dart';
 export 'src/observer/platform_brightness_observer.dart';
 export 'src/widgets/lifecycle_watcher.dart';
 export 'src/widgets/theme_mode_extensionpanellist.dart';
+export 'src/widgets/thememode_setup/thememode_setup.dart';

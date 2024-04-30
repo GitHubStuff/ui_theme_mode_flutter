@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
-import 'splash_screen.dart';
+part of 'thememode_setup.dart';
 
 const String _homeScreenRoute = '/themed_home_screen_v1r873';
 
@@ -10,11 +7,10 @@ class AppModule extends Module {
   final Widget homeScreen;
   final Widget splashWidget;
   final Duration splashScreenDuration;
-
   AppModule({
     required this.homeScreen,
-    this.splashWidget = const SizedBox.shrink(),
-    this.splashScreenDuration = Duration.zero,
+    required this.splashWidget,
+    required this.splashScreenDuration,
   });
 
   /// Binds the `UIThemeModeCubit` to the dependency injection container.
