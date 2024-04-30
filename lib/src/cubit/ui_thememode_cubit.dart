@@ -24,17 +24,15 @@ abstract class UIThemeModeAbstract {
 class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
     implements UIThemeModeAbstract {
   static UIThemeModeCubit? _singleton;
-  static ThemeMode _initialThemeMode = ThemeMode.dark;
 
   static UIThemeModeCubit volatile({
     ThemeMode initialThemeMode = ThemeMode.dark,
   }) {
     if (_singleton == null) {
       debugPrint('🧨🧨🧨🧨 VOLATILE DATABASE 🧨🧨🧨🧨');
-      _initialThemeMode = initialThemeMode;
       _singleton = UIThemeModeCubit._(
         noSqlProvider: NoSqlHiveTemp(),
-        initialThemeMode: _initialThemeMode,
+        initialThemeMode: initialThemeMode,
       );
     }
     return _singleton!;
@@ -45,10 +43,10 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
   }) {
     if (_singleton == null) {
       debugPrint('🙏🏽🙏🏽🙏🏽 PERSITED DATABASE 🙏🏽🙏🏽');
-      _initialThemeMode = initialThemeMode;
+      initialThemeMode;
       _singleton = UIThemeModeCubit._(
         noSqlProvider: NoSqlHive(),
-        initialThemeMode: _initialThemeMode,
+        initialThemeMode: initialThemeMode,
       );
     }
     return _singleton!;
@@ -79,6 +77,7 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
     await _noSqlProvider.init(databaseName: UIThemeModeAbstract.databaseName);
     await _setGlobalThemeContainer();
     ThemeMode themeModeFromNoSql = _getThemeModeFromNoSql();
+    _didSaveThemModeToNoSql(themeModeFromNoSql);
     emit(CubitThemeSet(themeModeFromNoSql));
     debugPrint('🔓 SETUP COMPLETE 🔓');
   }
@@ -92,39 +91,45 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
     String themeModeString = _noSqlProvider.get<CONTAINER>(
       UIThemeModeAbstract.keyName,
       fromContainer: _themeContainer as CONTAINER,
-      defaultValue: _initialThemeMode.name,
+      defaultValue: state.themeMode.name,
     );
     return ThemeModeExtension.from(string: themeModeString);
   }
 
-  @override
-  void setToDarkMode() => _setThemeMode(ThemeMode.dark);
-
-  @override
-  void setToLightMode() => _setThemeMode(ThemeMode.light);
-
-  @override
-  void setToSystemMode() => _setThemeMode(ThemeMode.system);
-
-  void _setThemeMode(ThemeMode newThemeMode) async {
+  bool _didSaveThemModeToNoSql(ThemeMode newThemeMode) {
     debugPrint('** Setting ${state.themeMode} to: $newThemeMode **');
-    if (state is! CubitThemeSet) {
+    if (newThemeMode == state.themeMode) return false;
+    if (state is! CubitThemeSet && state is! CubitConnectNoSql) {
       throw NoSqlError('🚫 Database not initialized 🚫');
     }
-    if (newThemeMode == state.themeMode) return;
-    _putThemeMode(newThemeMode, _themeContainer as CONTAINER);
-    emit(CubitThemeSet(newThemeMode));
+    _noSqlProvider.put<CONTAINER, String>(
+      UIThemeModeAbstract.keyName,
+      newThemeMode.name,
+      intoContainer: _themeContainer as CONTAINER,
+    );
+    return true;
   }
 
-  void _putThemeMode(
-    ThemeMode themeMode,
-    CONTAINER themeContainer,
-  ) =>
-      _noSqlProvider.put<CONTAINER, String>(
-        UIThemeModeAbstract.keyName,
-        themeMode.name,
-        intoContainer: themeContainer,
-      );
+  @override
+  void setToDarkMode() {
+    if (_didSaveThemModeToNoSql(ThemeMode.dark)) {
+      emit(const CubitThemeSet(ThemeMode.dark));
+    }
+  }
+
+  @override
+  void setToLightMode() {
+    if (_didSaveThemModeToNoSql(ThemeMode.light)) {
+      emit(const CubitThemeSet(ThemeMode.light));
+    }
+  }
+
+  @override
+  void setToSystemMode() {
+    if (_didSaveThemModeToNoSql(ThemeMode.system)) {
+      emit(const CubitThemeSet(ThemeMode.system));
+    }
+  }
 
   @override
   Future<void> close() async {

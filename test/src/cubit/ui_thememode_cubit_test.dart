@@ -28,13 +28,13 @@ void main() {
               'Starting: Initial state is UIThemeModeInitial (aka dark)');
           return UIThemeModeCubit<Box<String>>(
             noSqlProvider: noSqlProvider,
-            initialThemeMode: ThemeMode.light,
+            initialThemeMode: ThemeMode.dark,
           );
         },
         act: (cubit) async => await cubit.setUp(),
         expect: () => <UIThemeModeState>[
-              CubitConnectNoSql(ThemeMode.dark),
-              CubitThemeSet(ThemeMode.dark),
+              const CubitConnectNoSql(ThemeMode.dark),
+              const CubitThemeSet(ThemeMode.dark),
             ]);
     blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>(
         'Set to ThemeMode.system',
@@ -42,7 +42,7 @@ void main() {
           debugPrint('Starting: Set to ThemeMode.system');
           return UIThemeModeCubit<Box<String>>(
             noSqlProvider: noSqlProvider,
-            initialThemeMode: ThemeMode.dark,
+            initialThemeMode: ThemeMode.light,
           );
         },
         act: (cubit) async {
@@ -50,8 +50,9 @@ void main() {
           cubit.setToSystemMode();
         },
         expect: () => <UIThemeModeState>[
-              CubitConnectNoSql(ThemeMode.dark),
-              CubitThemeSet(ThemeMode.system),
+              const CubitConnectNoSql(ThemeMode.light),
+              const CubitThemeSet(ThemeMode.light),
+              const CubitThemeSet(ThemeMode.system),
             ]);
     blocTest<UIThemeModeCubit<Box<String>>, UIThemeModeState>(
         'Set to ThemeMode.light',
@@ -66,8 +67,9 @@ void main() {
           cubit.setToSystemMode();
         },
         expect: () => <UIThemeModeState>[
-              CubitConnectNoSql(ThemeMode.dark),
-              CubitThemeSet(ThemeMode.system),
+              const CubitConnectNoSql(ThemeMode.dark),
+              const CubitThemeSet(ThemeMode.dark),
+              const CubitThemeSet(ThemeMode.system),
             ]);
   });
 }
