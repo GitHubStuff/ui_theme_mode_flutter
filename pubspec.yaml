@@ -1,6 +1,6 @@
 name: ui_theme_mode_flutter
 description: "Controls/Persists/Notifies of changes in theme"
-version: 0.0.3+1
+version: 0.0.4+1
 home_page: http://www.icodeforyou.com
 publish_to: none # Remove this line if you wish to publish to pub.dev
 

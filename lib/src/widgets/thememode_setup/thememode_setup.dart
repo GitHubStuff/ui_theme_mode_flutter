@@ -12,11 +12,19 @@ class ThemeModeSetup extends StatelessWidget {
   final Widget homeScreen;
   final Widget splashWidget;
   final Duration splashScreenDuration;
+  final ThemeData? darkTheme;
+  final ThemeData? lightTheme;
+  final Iterable<ThemeExtension<dynamic>> themeExtensions;
+  final List<BlocProvider> blocProviders;
   const ThemeModeSetup({
     super.key,
     required this.homeScreen,
     this.splashWidget = const SizedBox(),
     this.splashScreenDuration = Duration.zero,
+    this.darkTheme,
+    this.lightTheme,
+    this.themeExtensions = const [],
+    this.blocProviders = const [],
   });
 
   @override
@@ -27,7 +35,13 @@ class ThemeModeSetup extends StatelessWidget {
         splashWidget: splashWidget,
         splashScreenDuration: splashScreenDuration,
       ),
-      child: const MaterialRouterWidget(),
+      child: MaterialRouterWidget(
+        darkTheme: (darkTheme ?? ThemeData.dark())
+            .copyWith(extensions: themeExtensions),
+        lightTheme: (lightTheme ?? ThemeData.light())
+            .copyWith(extensions: themeExtensions),
+        blocProviders: blocProviders,
+      ),
     );
   }
 }
