@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:theme_demo/screens/animated_selector.dart';
 import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
 
 import '../gen/assets.gen.dart';
@@ -24,6 +25,7 @@ class HomeScaffold extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('${cubit.brightness}'),
+          const AnimatedSelector(choices: 3),
           SizedBox(
             width: 200,
             height: 200,
