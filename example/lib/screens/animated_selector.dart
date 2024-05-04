@@ -1,31 +1,19 @@
 import 'package:flutter/material.dart';
-
 import 'circle.dart';
-
-const double _yOffset = 0.0;
 
 class AnimatedSelector extends StatefulWidget {
   final double diameter;
   final int buttonCount;
   final int startingIndex;
   final Function(int) onSelected;
-
-  /// Pixel gap between the rail and the circle
   final double railGap;
   final Color circleColor;
-
-  ///Color of lines between the circles
   final Color railColor;
-
-  ///Color of the circle
   final Color ringColor;
-
-  ///Color of the circle when it is moving
   final Color travelColor;
-
-  /// Stroke width of the lines between the circles
   final double railStroke;
   final Duration animationDuration;
+
   const AnimatedSelector({
     super.key,
     required this.buttonCount,
@@ -39,34 +27,52 @@ class AnimatedSelector extends StatefulWidget {
     this.ringColor = Colors.black,
     this.startingIndex = 0,
     this.travelColor = Colors.green,
-  })  : assert(diameter >= 14.0, 'diameter must be >= to 14.0'),
+  })  : assert(diameter >= 14.0, 'Diameter must be at least 14.0.'),
         assert(animationDuration >= Duration.zero,
-            'animationDuration must be > Duration.zero'),
+            'Animation duration must be positive.'),
         assert(startingIndex >= 0 && startingIndex < buttonCount,
-            'startingIndex[$startingIndex] must be >= 0 and < $buttonCount'),
-        assert(buttonCount > 1, 'buttonCount must be > 1');
+            'Starting index must be between 0 and buttonCount - 1.'),
+        assert(buttonCount > 1, 'Button count must be greater than 1.');
 
   @override
   State<AnimatedSelector> createState() => _AnimatedSelectorState();
 }
 
 class _AnimatedSelectorState extends State<AnimatedSelector> {
-  int _selectedIndex = 0;
+  late int selectedIndex;
   late Color selectionColor;
+  late double distanceBetweenButtonsAsPct;
+  late List<Widget> circles;
+  final double yOffset = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.startingIndex;
+    selectedIndex = widget.startingIndex;
     selectionColor = widget.circleColor;
+    distanceBetweenButtonsAsPct = 2.0 / (widget.buttonCount - 1.0);
+    circles = List.generate(widget.buttonCount, (index) => _buildCircle(index));
+  }
+
+  Widget _buildCircle(int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedIndex = index;
+          widget.onSelected(index);
+          selectionColor = widget.travelColor;
+        });
+      },
+      child: RingAndCircleWidget(
+        diameter: widget.diameter,
+        ringColor: widget.ringColor,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final distanceBetweenButtonsAsPct =
-        1.0 / ((widget.buttonCount - 1.0) / 2.0);
-    // AnimatedAlign "x"-position (must be -1 to +1 inclusive)
-    final xPos = -1.0 + _selectedIndex * distanceBetweenButtonsAsPct;
+    final xPos = -1.0 + selectedIndex * distanceBetweenButtonsAsPct;
 
     return Stack(
       alignment: Alignment.center,
@@ -84,23 +90,10 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(widget.buttonCount, (index) {
-            return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = index;
-                    widget.onSelected(index);
-                    selectionColor = widget.travelColor;
-                  });
-                },
-                child: RingAndCircleWidget(
-                  diameter: widget.diameter,
-                  ringColor: widget.ringColor,
-                ));
-          }),
+          children: circles,
         ),
         AnimatedAlign(
-          alignment: Alignment(xPos, _yOffset),
+          alignment: Alignment(xPos, yOffset),
           onEnd: () => setState(() => selectionColor = widget.circleColor),
           curve: Curves.decelerate,
           duration: widget.animationDuration,
@@ -122,34 +115,50 @@ class _RailPainter extends CustomPainter {
   final Color railColor;
   final double stroke;
 
-  _RailPainter(
-    this.choices, {
-    required this.iconDiameter,
-    required this.gap,
-    required this.railColor,
-    required this.stroke,
-  });
+  List<Offset> startPoints = [];
+  List<Offset> endPoints = [];
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = railColor
-      ..strokeWidth = stroke.toDouble();
+  _RailPainter(this.choices,
+      {required this.iconDiameter,
+      required this.gap,
+      required this.railColor,
+      required this.stroke});
+
+  /// One time calculation of the start and end points of the rail
+  void _calculatePoints(Size size) {
+    if (startPoints.isNotEmpty) return;
 
     final totalSpacing = size.width - iconDiameter * choices;
+
     final segmentWidth = (totalSpacing / (choices - 1)) - (2.0 * gap);
 
-    // Draw lines between the circles
     double startX = iconDiameter + gap;
-    double endX = startX + segmentWidth;
+
     for (int i = 1; i < choices; i++) {
-      canvas.drawLine(Offset(startX.toDouble(), size.height / 2),
-          Offset(endX, size.height / 2), paint);
+      double endX = startX + segmentWidth;
+      startPoints.add(Offset(startX, 0));
+      endPoints.add(Offset(endX, 0));
       startX = endX + iconDiameter + (gap * 2);
-      endX = startX + segmentWidth;
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  void paint(Canvas canvas, Size size) {
+    debugPrint('PAINTING');
+
+    /// Cache the points
+    _calculatePoints(size);
+    final paint = Paint()
+      ..color = railColor
+      ..strokeWidth = stroke
+      ..style = PaintingStyle.stroke;
+
+    for (int i = 0; i < startPoints.length; i++) {
+      canvas.drawLine(startPoints[i].translate(0, size.height / 2),
+          endPoints[i].translate(0, size.height / 2), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_RailPainter oldDelegate) => false;
 }
