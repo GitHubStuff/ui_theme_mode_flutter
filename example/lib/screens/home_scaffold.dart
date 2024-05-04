@@ -27,9 +27,17 @@ class HomeScaffold extends StatelessWidget {
         children: [
           Text('${cubit.brightness}'),
           //const RingAndCircleWidget(diameter: 25),
-          const AnimatedSelector(
-            diameter: 24.0,
-            buttonCount: 3,
+          AnimatedSelector(
+            buttonCount: 7,
+            onSelected: (index) => debugPrint('Selected: $index'),
+            animationDuration: const Duration(milliseconds: 1500),
+            diameter: 18.0,
+            railColor: Colors.deepOrange,
+            railGap: 3.0,
+            railStroke: 4.0,
+            ringColor: Colors.orange,
+            startingIndex: 1,
+            travelColor: Colors.green,
           ).withSymmetricPadding(horizontal: 8.0),
           //const AnimatedSelector(),
           SizedBox(
