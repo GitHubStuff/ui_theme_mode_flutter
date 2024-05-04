@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:theme_demo/screens/animated_selector.dart';
 import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
+import 'package:ui_extensions_flutter/ui_extensions_flutter.dart';
 
 import '../gen/assets.gen.dart';
 
@@ -25,14 +26,16 @@ class HomeScaffold extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('${cubit.brightness}'),
-          const AnimatedSelector(choices: 3),
+          //const RingAndCircleWidget(diameter: 25),
+          const AnimatedSelector(
+            diameter: 24.0,
+            buttonCount: 3,
+          ).withSymmetricPadding(horizontal: 8.0),
+          //const AnimatedSelector(),
           SizedBox(
-            width: 200,
-            height: 200,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Assets.images.rainbow.image(),
-            ),
+            width: 150,
+            height: 150,
+            child: Assets.images.rainbow.image().withPaddingAll(8.0),
           ),
           ElevatedButton(
               onPressed: () {

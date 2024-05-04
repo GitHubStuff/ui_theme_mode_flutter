@@ -1,64 +1,75 @@
 import 'package:flutter/material.dart';
 
-class AnimatedSelector extends StatefulWidget {
-  final int choices;
+import 'circle.dart';
 
-  const AnimatedSelector({super.key, required this.choices});
+class AnimatedSelector extends StatefulWidget {
+  final double diameter;
+  final int buttonCount;
+  final double gap;
+  final Color railColor;
+  final double stroke;
+  const AnimatedSelector({
+    super.key,
+    required this.diameter,
+    required this.buttonCount,
+    this.gap = 1.0,
+    this.railColor = Colors.black,
+    this.stroke = 1.5,
+  });
 
   @override
   State<AnimatedSelector> createState() => _AnimatedSelectorState();
 }
 
 class _AnimatedSelectorState extends State<AnimatedSelector> {
-  double _selectedIndex = 0.0;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      double maxWidth = constraints.maxWidth;
-      double iconDiameter = 40; // Diameter of the circle icon
-      double iconCenter = 25.0; // Center of the circle icon
-      double totalSpacing = maxWidth - iconDiameter * widget.choices;
-      double segmentWidth = totalSpacing / (widget.choices - 1);
-      double x = ((iconDiameter / 2.0 + iconCenter / 2.0) +
-              (_selectedIndex * (iconDiameter + segmentWidth))) /
-          (maxWidth * 2.0);
+      final distanceBetweenButtonsAsPct =
+          1.0 / ((widget.buttonCount - 1.0) / 2.0);
+      // AnimatedAlign "x"-position
+      final xPos = -1.0 + _selectedIndex * distanceBetweenButtonsAsPct;
 
       return SizedBox(
         width: double.infinity,
-        height: 60,
+        height: widget.diameter,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Positioned.fill(
               child: CustomPaint(
-                painter: RailPainter(widget.choices),
+                painter: RailPainter(
+                  widget.buttonCount,
+                  iconDiameter: widget.diameter,
+                  gap: widget.gap,
+                  railColor: widget.railColor,
+                  stroke: widget.stroke,
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(widget.choices, (index) {
+              children: List.generate(widget.buttonCount, (index) {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedIndex = index.toDouble();
+                      _selectedIndex = index;
                     });
                   },
-                  child: const Icon(Icons.radio_button_unchecked, size: 40),
+                  child: RingAndCircleWidget(diameter: widget.diameter),
                 );
               }),
             ),
             AnimatedAlign(
-              alignment: Alignment(-1 + x, 0),
+              alignment: Alignment(xPos, 0),
               curve: Curves.decelerate,
               duration: const Duration(seconds: 1),
-              child: Container(
-                width: 25,
-                height: 25,
-                decoration: const BoxDecoration(
-                  color: Colors.blue,
-                  shape: BoxShape.circle,
-                ),
+              child: RingAndCircleWidget(
+                diameter: widget.diameter,
+                ringColor: Colors.transparent,
+                selectedColor: Colors.purple,
               ),
             ),
           ],
@@ -70,26 +81,35 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
 
 class RailPainter extends CustomPainter {
   final int choices;
+  final double iconDiameter;
+  final double gap;
+  final Color railColor;
+  final double stroke;
 
-  RailPainter(this.choices);
+  RailPainter(
+    this.choices, {
+    required this.iconDiameter,
+    required this.gap,
+    required this.railColor,
+    required this.stroke,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.yellow
-      ..strokeWidth = 4;
+      ..color = railColor
+      ..strokeWidth = stroke;
 
-    double iconDiameter = 40; // Diameter of the circle icon
     double totalSpacing = size.width - iconDiameter * choices;
-    double segmentWidth = totalSpacing / (choices - 1);
+    double segmentWidth = (totalSpacing / (choices - 1)) - (2.0 * gap);
 
     // Draw lines between the circles
-    double startX = iconDiameter;
+    double startX = iconDiameter + gap;
     double endX = startX + segmentWidth;
     for (int i = 1; i < choices; i++) {
       canvas.drawLine(Offset(startX, size.height / 2),
           Offset(endX, size.height / 2), paint);
-      startX = endX + 1.0 + iconDiameter + 1.0;
+      startX = endX + iconDiameter + (gap * 2);
       endX = startX + segmentWidth;
     }
   }
