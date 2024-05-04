@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import 'circle.dart';
 
 class AnimatedSelector extends StatefulWidget {
-  final double diameter;
+  static const double minDiameter = 14.0;
+  static const Duration defaultAnimationDuration = Duration(milliseconds: 200);
+  static const Color defaultColor = Colors.black;
+  static const Color defaultTravelColor = Colors.green;
+  static const double defaultRailGap = 1.0;
+  static const double defaultRailStroke = 1.5;
+  static const Curve defaultCurve = Curves.decelerate;
+  // AnimatedAlign uses -1.0 to 1.0, start is -1.0
+  static const double animatedAlignStart = -1.0;
+
+  final double circleDiameter;
   final int buttonCount;
-  final int startingIndex;
   final Function(int) onSelected;
+  final int startingIndex;
   final double railGap;
   final Color circleColor;
   final Color railColor;
@@ -13,21 +23,24 @@ class AnimatedSelector extends StatefulWidget {
   final Color travelColor;
   final double railStroke;
   final Duration animationDuration;
+  final Curve animationCurve;
 
   const AnimatedSelector({
     super.key,
     required this.buttonCount,
     required this.onSelected,
-    this.animationDuration = const Duration(milliseconds: 200),
-    this.circleColor = Colors.black,
-    this.diameter = 18,
-    this.railColor = Colors.black,
-    this.railGap = 1.0,
-    this.railStroke = 1.5,
-    this.ringColor = Colors.black,
+    this.animationCurve = defaultCurve,
+    this.animationDuration = defaultAnimationDuration,
+    this.circleColor = defaultColor,
+    this.circleDiameter = minDiameter,
+    this.railColor = defaultColor,
+    this.railGap = defaultRailGap,
+    this.railStroke = defaultRailStroke,
+    this.ringColor = defaultColor,
     this.startingIndex = 0,
-    this.travelColor = Colors.green,
-  })  : assert(diameter >= 14.0, 'Diameter must be at least 14.0.'),
+    this.travelColor = defaultTravelColor,
+  })  : assert(circleDiameter >= minDiameter,
+            'Diameter must be at least $minDiameter.'),
         assert(animationDuration >= Duration.zero,
             'Animation duration must be positive.'),
         assert(startingIndex >= 0 && startingIndex < buttonCount,
@@ -39,11 +52,11 @@ class AnimatedSelector extends StatefulWidget {
 }
 
 class _AnimatedSelectorState extends State<AnimatedSelector> {
+  static const double yAlignment = 0.0;
   late int selectedIndex;
   late Color selectionColor;
   late double distanceBetweenButtonsAsPct;
   late List<Widget> circles;
-  final double yOffset = 0.0;
 
   @override
   void initState() {
@@ -64,7 +77,7 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
         });
       },
       child: RingAndCircleWidget(
-        diameter: widget.diameter,
+        diameter: widget.circleDiameter,
         ringColor: widget.ringColor,
       ),
     );
@@ -78,13 +91,15 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
       alignment: Alignment.center,
       children: <Widget>[
         Positioned.fill(
-          child: CustomPaint(
-            painter: _RailPainter(
-              widget.buttonCount,
-              iconDiameter: widget.diameter,
-              gap: widget.railGap,
-              railColor: widget.railColor,
-              stroke: widget.railStroke,
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: _RailPainter(
+                widget.buttonCount,
+                iconDiameter: widget.circleDiameter,
+                gap: widget.railGap,
+                railColor: widget.railColor,
+                stroke: widget.railStroke,
+              ),
             ),
           ),
         ),
@@ -93,12 +108,12 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
           children: circles,
         ),
         AnimatedAlign(
-          alignment: Alignment(xPos, yOffset),
+          alignment: Alignment(xPos, yAlignment),
           onEnd: () => setState(() => selectionColor = widget.circleColor),
-          curve: Curves.decelerate,
+          curve: widget.animationCurve,
           duration: widget.animationDuration,
           child: RingAndCircleWidget(
-            diameter: widget.diameter,
+            diameter: widget.circleDiameter,
             ringColor: Colors.transparent,
             circleColor: selectionColor,
           ),
