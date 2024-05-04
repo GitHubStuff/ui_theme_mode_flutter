@@ -73,7 +73,7 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
       children: <Widget>[
         Positioned.fill(
           child: CustomPaint(
-            painter: RailPainter(
+            painter: _RailPainter(
               widget.buttonCount,
               iconDiameter: widget.diameter,
               gap: widget.railGap,
@@ -115,14 +115,14 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
   }
 }
 
-class RailPainter extends CustomPainter {
+class _RailPainter extends CustomPainter {
   final int choices;
   final double iconDiameter;
   final double gap;
   final Color railColor;
   final double stroke;
 
-  RailPainter(
+  _RailPainter(
     this.choices, {
     required this.iconDiameter,
     required this.gap,
