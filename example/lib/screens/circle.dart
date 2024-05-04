@@ -18,14 +18,8 @@ class RingAndCircleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate ring thickness
-    double ringThickness = ((diameter * 0.05) < minRingThickness)
-        ? minRingThickness
-        : (diameter * 0.05);
-
-    // Calculate circle radius {8px or 5x ring thickness, whichever is greater}
-    double circleDiameter =
-        (diameter - max(ringThickness * 5.0, defaultRingPadding));
+    final double ringThickness = _calculateRingThickness();
+    final double circleDiameter = _calculateCircleDiameter(ringThickness);
 
     return SizedBox(
       width: diameter,
@@ -33,27 +27,35 @@ class RingAndCircleWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Ring
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: ringColor,
-                width: ringThickness,
-              ),
-            ),
-          ),
-          // Solid center circle
-          Container(
-            width: circleDiameter,
-            height: circleDiameter,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: circleColor,
-            ),
-          ),
+          _buildRing(ringThickness),
+          _buildInnerCircle(circleDiameter),
         ],
       ),
     );
   }
+
+  ///Minial thickness or 5% of the diameter
+  double _calculateRingThickness() => max(minRingThickness, diameter * 0.05);
+
+  double _calculateCircleDiameter(double ringThickness) =>
+      diameter - max(ringThickness * 5, defaultRingPadding);
+
+  Widget _buildRing(double thickness) => Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: ringColor,
+            width: thickness,
+          ),
+        ),
+      );
+
+  Widget _buildInnerCircle(double diameter) => Container(
+        width: diameter,
+        height: diameter,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: circleColor,
+        ),
+      );
 }
