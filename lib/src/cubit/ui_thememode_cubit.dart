@@ -7,19 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart' show Cubit;
 import 'package:nosql_dart/nosql_dart.dart';
 
 import '../extensions/thememode_extension.dart';
+import 'ui_thememode_abstract.dart';
 
 part 'ui_thememode_state.dart';
-
-abstract class UIThemeModeAbstract {
-  static const String databaseName = 'icfy_uithememode_database_v1r829464';
-  static const String containerName = 'icfy_uithememode_container_v1r816447';
-  static const String keyName = 'themeMode';
-  void setUp();
-  void setToDarkMode();
-  void setToLightMode();
-  void setToSystemMode();
-  Brightness get brightness;
-}
 
 class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
     implements UIThemeModeAbstract {

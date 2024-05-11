@@ -27,7 +27,7 @@ class HomeScaffold extends StatelessWidget {
         children: [
           Text('${cubit.brightness}'),
           //const RingAndCircleWidget(diameter: 25),
-          AnimatedSelector(
+          UIAnimatedRadioGroup(
             buttonCount: 3,
             onSelected: (index) => debugPrint('Selected: $index'),
             animationCurve: Curves.fastOutSlowIn,

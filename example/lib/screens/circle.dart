@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class RingAndCircleWidget extends StatelessWidget {
+class UIAnimatedRadioButton extends StatelessWidget {
   static const double minRingThickness = 1.5;
   static const double defaultRingPadding = 8.0;
   final double diameter;
   final Color ringColor;
   final Color circleColor;
 
-  const RingAndCircleWidget({
+  const UIAnimatedRadioButton({
     super.key,
     required this.diameter,
     this.ringColor = Colors.black,

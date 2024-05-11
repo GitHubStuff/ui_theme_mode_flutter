@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'circle.dart';
 
-class AnimatedSelector extends StatefulWidget {
+class UIAnimatedRadioGroup extends StatefulWidget {
   static const double minDiameter = 14.0;
   static const Duration defaultAnimationDuration = Duration(milliseconds: 200);
   static const Color defaultColor = Colors.black;
@@ -25,7 +25,7 @@ class AnimatedSelector extends StatefulWidget {
   final Duration animationDuration;
   final Curve animationCurve;
 
-  const AnimatedSelector({
+  const UIAnimatedRadioGroup({
     super.key,
     required this.buttonCount,
     required this.onSelected,
@@ -48,10 +48,10 @@ class AnimatedSelector extends StatefulWidget {
         assert(buttonCount > 1, 'Button count must be greater than 1.');
 
   @override
-  State<AnimatedSelector> createState() => _AnimatedSelectorState();
+  State<UIAnimatedRadioGroup> createState() => _UIAnimatedRadioGroupState();
 }
 
-class _AnimatedSelectorState extends State<AnimatedSelector> {
+class _UIAnimatedRadioGroupState extends State<UIAnimatedRadioGroup> {
   static const double yAlignment = 0.0;
   late int selectedIndex;
   late Color selectionColor;
@@ -76,7 +76,7 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
           selectionColor = widget.travelColor;
         });
       },
-      child: RingAndCircleWidget(
+      child: UIAnimatedRadioButton(
         diameter: widget.circleDiameter,
         ringColor: widget.ringColor,
       ),
@@ -112,7 +112,7 @@ class _AnimatedSelectorState extends State<AnimatedSelector> {
           onEnd: () => setState(() => selectionColor = widget.circleColor),
           curve: widget.animationCurve,
           duration: widget.animationDuration,
-          child: RingAndCircleWidget(
+          child: UIAnimatedRadioButton(
             diameter: widget.circleDiameter,
             ringColor: Colors.transparent,
             circleColor: selectionColor,
