@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:theme_demo/screens/animated_selector.dart';
 import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
 import 'package:ui_extensions_flutter/ui_extensions_flutter.dart';
 
@@ -20,26 +19,14 @@ class HomeScaffold extends StatelessWidget {
   }
 
   Widget homeWidget(BuildContext context) {
-    final cubit = context.read<UIThemeModeCubit>();
+    final cubit = context.watch<UIThemeModeCubit>();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('${cubit.brightness}'),
           //const RingAndCircleWidget(diameter: 25),
-          UIAnimatedRadioGroup(
-            buttonCount: 3,
-            onSelected: (index) => debugPrint('Selected: $index'),
-            animationCurve: Curves.fastOutSlowIn,
-            animationDuration: const Duration(milliseconds: 1500),
-            circleDiameter: 40.0,
-            railColor: Colors.deepOrange,
-            railGap: 3.0,
-            railStroke: 4.0,
-            ringColor: Colors.orange,
-            startingIndex: 1,
-            travelColor: Colors.green,
-          ).withSymmetricPadding(horizontal: 16.0),
+
           //const AnimatedSelector(),
           SizedBox(
             width: 150,

@@ -3,11 +3,12 @@ part of 'thememode_setup.dart';
 const String _homeScreenRoute = '/themed_home_screen_v1r873';
 
 /// A `Module` that provides the routes and dependencies for the application.
-class AppModule extends Module {
+class ThemeAppModule extends Module {
+  static bool hasSplashScreenDisplayed = false;
   final Widget homeScreen;
   final Widget splashWidget;
   final Duration splashScreenDuration;
-  AppModule({
+  ThemeAppModule({
     required this.homeScreen,
     required this.splashWidget,
     required this.splashScreenDuration,
@@ -25,11 +26,12 @@ class AppModule extends Module {
     /// Defines the splash route.
     r.child(
       Modular.initialRoute,
-      child: (_) => SplashScreen(
-        firstRoute: _homeScreenRoute,
-        splashWidget: splashWidget,
-        splashScreenDuration: splashScreenDuration,
-      ),
+      child: (_) => hasSplashScreenDisplayed
+          ? homeScreen
+          : SplashScreen(
+              splashWidget: splashWidget,
+              splashScreenDuration: splashScreenDuration,
+            ),
       transition: TransitionType.noTransition,
     );
 

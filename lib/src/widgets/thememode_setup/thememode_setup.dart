@@ -9,16 +9,18 @@ part 'thememode_app_module.dart';
 part 'material_router_widget.dart';
 
 class ThemeModeSetup extends StatelessWidget {
-  final Widget homeScreen;
+  final Widget initialScreen;
   final Widget splashWidget;
   final Duration splashScreenDuration;
   final ThemeData? darkTheme;
   final ThemeData? lightTheme;
   final Iterable<ThemeExtension<dynamic>> themeExtensions;
   final List<BlocProvider> blocProviders;
+
+  //MARK: Constructor
   const ThemeModeSetup({
     super.key,
-    required this.homeScreen,
+    required this.initialScreen,
     this.splashWidget = const SizedBox(),
     this.splashScreenDuration = Duration.zero,
     this.darkTheme,
@@ -30,8 +32,8 @@ class ThemeModeSetup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModularApp(
-      module: AppModule(
-        homeScreen: homeScreen,
+      module: ThemeAppModule(
+        homeScreen: initialScreen,
         splashWidget: splashWidget,
         splashScreenDuration: splashScreenDuration,
       ),
