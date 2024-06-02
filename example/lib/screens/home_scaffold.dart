@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_shared/ui_shared.dart';
 import 'package:ui_theme_mode_flutter/ui_theme_mode_flutter.dart';
-import 'package:ui_extensions_flutter/ui_extensions_flutter.dart';
 
 import '../gen/assets.gen.dart';
 

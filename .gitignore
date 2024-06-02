@@ -351,3 +351,4 @@ coverage/
 /.flutter-plugins-dependencies
 example/.flutter-plugins-dependencies
 example/.flutter-plugins-dependencies
+/example/.flutter-plugins-dependencies

@@ -19,8 +19,8 @@ dependencies:
   # flutter_modular: ^6.3.3 # Smart project structure with dependency injection and route management
   # nosql_dart:
   #   git: https://github.com/GitHubStuff/nosql_dart.git
-  ui_extensions_flutter:
-    git: https://github.com/GitHubStuff/ui_extensions_flutter.git
+  ui_shared:
+    git: https://github.com/GitHubStuff/ui_shared_flutter.git
   ui_theme_mode_flutter:
     path: ../../ui_theme_mode_flutter
 
