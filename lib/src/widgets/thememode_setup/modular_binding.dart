@@ -10,7 +10,7 @@ class ModularBind<T> {
   final T module;
   final ModuleBindEnum bind;
 
-  ModularBind({
+  const ModularBind({
     required this.bind,
     required this.module,
   });

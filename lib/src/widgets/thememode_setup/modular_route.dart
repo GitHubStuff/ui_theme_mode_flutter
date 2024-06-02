@@ -5,7 +5,7 @@ class ModularRouting {
   final ModularChild child;
   final TransitionType? transition;
 
-  ModularRouting({
+  const ModularRouting({
     required this.route,
     required this.child,
     this.transition,
