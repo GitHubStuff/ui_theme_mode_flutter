@@ -5,8 +5,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../cubit/ui_thememode_cubit.dart';
 import '../splash_screen.dart';
 
-part 'thememode_app_module.dart';
 part 'material_router_widget.dart';
+part 'modular_binding.dart';
+part 'modular_route.dart';
+part 'thememode_app_module.dart';
 
 class ThemeModeSetup extends StatelessWidget {
   final Widget initialScreen;
@@ -16,6 +18,8 @@ class ThemeModeSetup extends StatelessWidget {
   final ThemeData? lightTheme;
   final Iterable<ThemeExtension<dynamic>> themeExtensions;
   final List<BlocProvider> blocProviders;
+  final List<ModularBind> moduleBindings;
+  final List<ModularRouting> routes;
 
   //MARK: Constructor
   const ThemeModeSetup({
@@ -27,6 +31,8 @@ class ThemeModeSetup extends StatelessWidget {
     this.lightTheme,
     this.themeExtensions = const [],
     this.blocProviders = const [],
+    required this.moduleBindings,
+    required this.routes,
   });
 
   @override
@@ -36,6 +42,8 @@ class ThemeModeSetup extends StatelessWidget {
         homeScreen: initialScreen,
         splashWidget: splashWidget,
         splashScreenDuration: splashScreenDuration,
+        bindList: moduleBindings,
+        routeList: routes,
       ),
       child: MaterialRouterWidget(
         darkTheme: (darkTheme ?? ThemeData.dark())

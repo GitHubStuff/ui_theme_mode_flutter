@@ -9,6 +9,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   return runApp(const ThemeModeSetup(
     initialScreen: HomeScaffold(),
+    moduleBindings: [],
+    routes: [],
     splashWidget: Scaffold(
       body: Center(
         child: Column(
