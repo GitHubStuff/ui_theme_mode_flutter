@@ -1,6 +1,6 @@
 library ui_theme_mode_flutter;
 
-export 'src/create_material_color.dart';
+export 'src/blue_materialcolor.dart';
 export 'src/cubit/ui_thememode_abstract.dart';
 export 'src/cubit/ui_thememode_cubit.dart';
 export 'src/extensions/thememode_extension.dart';

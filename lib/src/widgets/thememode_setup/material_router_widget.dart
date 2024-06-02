@@ -17,7 +17,7 @@ class MaterialRouterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get the UIThemeModeCubit from the dependency injection container.
-    UIThemeModeCubit cubit = Modular.get<UIThemeModeCubit>()..setUp();
+    UIThemeModeCubit cubit = Modular.get<UIThemeModeCubit>()..restore();
     // Use a BlocBuilder to rebuild the MaterialApp when the UIThemeModeState changes.
     return BlocBuilder<UIThemeModeCubit, UIThemeModeState>(
       bloc: cubit,

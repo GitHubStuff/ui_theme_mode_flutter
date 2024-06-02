@@ -2,7 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:ui_extensions_flutter/ui_extensions_flutter.dart';
+import 'package:ui_shared/ui_shared.dart';
 
 class Spinner extends StatelessWidget {
   const Spinner({super.key});

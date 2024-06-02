@@ -52,7 +52,7 @@ class UIThemeModeCubit<CONTAINER> extends Cubit<UIThemeModeState>
   CONTAINER? _themeContainer;
 
   @override
-  FutureOr<void> setUp() async {
+  FutureOr<void> restore() async {
     if (state is! CubitInitial) return;
     emit(CubitWaitingToConnectMySql(state.themeMode));
     await _noSqlProvider.init(databaseName: UIThemeModeAbstract.databaseName);

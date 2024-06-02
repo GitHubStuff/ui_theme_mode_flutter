@@ -5,7 +5,7 @@ extension ThemeModeExtension on ThemeMode {
     for (ThemeMode themeMode in ThemeMode.values) {
       if (themeMode.name == string.toLowerCase()) return themeMode;
     }
-    throw StateError('ThemeMode not found');
+    throw StateError('ThemeMode: $string not found');
   }
 
   Brightness get brightness {

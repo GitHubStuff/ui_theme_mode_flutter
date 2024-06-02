@@ -31,7 +31,7 @@ void main() {
             initialThemeMode: ThemeMode.dark,
           );
         },
-        act: (cubit) async => await cubit.setUp(),
+        act: (cubit) async => await cubit.restore(),
         expect: () => <UIThemeModeState>[
               const CubitWaitingToConnectMySql(ThemeMode.dark),
               const CubitThemeSet(ThemeMode.dark),
@@ -46,7 +46,7 @@ void main() {
           );
         },
         act: (cubit) async {
-          await cubit.setUp();
+          await cubit.restore();
           cubit.setToSystemMode();
         },
         expect: () => <UIThemeModeState>[
@@ -63,7 +63,7 @@ void main() {
           );
         },
         act: (cubit) async {
-          await cubit.setUp();
+          await cubit.restore();
           cubit.setToSystemMode();
         },
         expect: () => <UIThemeModeState>[
